@@ -17,7 +17,7 @@
 ## Project Description
 
 << Give an overview of your project >>
-
+# We aim to create a gimmicky rhythm game with mechanics similar to games like Dance Dance Revolution and Guitar Hero with tracks, notes, and terminals for the notes that respond to button inputs. What would make our game different is that the tracks are arranged in a cross pattern with the notes converging in the center. To keep it from being too overwhelming, only the left and right tracks are active at a time and the player has the ability to rotate the order of the terminals. It's admittedly difficult to explain, but visually a simple concept, and simple concepts with lots of applications make for potentially difficult but enjoyable gameplay.
 ***    
 
 ## User Interface Design
