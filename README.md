@@ -42,7 +42,16 @@
     * << A simple drawing that shows the class relationships in your code (see below for an example). This does not need to be overly detailed, but should show how your code fits into the Model/View/Controller paradigm. >>
         * ![class diagram](assets/class_diagram.jpg) 
 * Classes
-    * << You should have a list of each of your classes with a description. >>
+    * Button: color, orientation, position, active, on
+      * init: creates a button in the desired position, with a designated
+      * pressed: called when the button is pressed, changes the active variable
+      * rotate: when the record is rotated, this will change the orientation of the button
+      * draw: used to draw the buttons
+
+    * Record: surface, height and width, list of buttons
+      * init: Creates the record in which the buttons will be drawn on
+      * spin: Spins the record and then tells the buttons to change position
+      * draw: used to draw the record and tell the buttons to draw themselves
 
 ## Project Structure and File List
 
@@ -50,7 +59,12 @@ The Project is broken down into the following file structure:
 
 * main.py
 * src
-    * << all of your python files should go here >>
+  *  main
+  *  var
+  *  colors
+  *  Objects:
+    *  Record
+    *  Button
 * assets
     * << all of your media, i.e. images, font files, etc, should go here) >>
 * etc
