@@ -3,6 +3,7 @@ from var import *
 from colors import *
 from Record import Record
 from Button import Button
+from Note import Note
 # Setup pygame/window ---------------------------------------- #
 mainClock = pygame.time.Clock()
 
@@ -18,15 +19,20 @@ fx_surf.fill(clear)
 # Functions ------------------------------------------------------- #
 
 
-def UpdateBeat(b):
+def UpdateBeat(b, total=False):
     beatsPerFrame = (bpm / 60) / framerate
     b += beatsPerFrame
+    if total == True:
+        bct = font2.render(f"{round(b,1)}", False, "white")
+        bct_rect = bct.get_rect(center=(screenSize[0] / 2, screenSize[1] / 4))
+        txt_surf.blit(bct, bct_rect)
+        return beatsPerFrame
     mn = font1.render("." * math.floor(b), False, "white")
     mn_rect = mn.get_rect(center=(screenSize[0] / 2, screenSize[1] / 2))
-    bc = font2.render(f"{round(b,5)}", False, "white")
+    bc = font2.render(f"{round(b,1)}", False, "white")
     bc_rect = bc.get_rect(center=(screenSize[0] / 2, screenSize[1] / 3))
-    txt_surf.blit(mn, mn_rect)
     txt_surf.blit(bc, bc_rect)
+    txt_surf.blit(mn, mn_rect)
     if b >= 9:
         b = 0
     return b
@@ -39,6 +45,8 @@ orangeBtn = Button("E", orange, record, screenSize)
 greenBtn = Button("S", green, record, screenSize)
 magentaBtn = Button("N", magenta, record, screenSize)
 
+note = Note(green, -1, 5, 2, game_surf, screenSize)
+
 # Loop ------------------------------------------------------- #
 while True:
 
@@ -49,16 +57,19 @@ while True:
     # Visuals --------------------------------------------- #
 
     # surfaces
+    screen.fill(bkg)
     game_surf.fill(pygame.Color(255, 255, 255, 0))
     fx_surf.fill(pygame.Color(255, 255, 255, 0))
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
 
     # draw the records and buttons
     record.draw(gray)
+    note.move(dt)
 
     # update beat count
-    beat = UpdateBeat(beat)
 
+    beat = UpdateBeat(beat)
+    beatTotal = UpdateBeat(beatTotal, True)
     # Input ------------------------------------------------ #
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

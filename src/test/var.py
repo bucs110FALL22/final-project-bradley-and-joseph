@@ -1,10 +1,12 @@
 import pygame, time
+
 pygame.init()
 
 last_time = time.time()
 framerate = 60
-bpm = 60
+bpm = 30
 beat = 0
+beatTotal = 0
 
 screen = pygame.display.set_mode()
 screenSize = pygame.display.get_window_size()
