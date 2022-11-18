@@ -4,6 +4,7 @@ from colors import *
 from Record import Record
 from Button import Button
 from Note import Note
+from sequences import s1
 # Setup pygame/window ---------------------------------------- #
 mainClock = pygame.time.Clock()
 
@@ -38,6 +39,21 @@ def UpdateBeat(b, total=False):
     return b
 
 
+def progressSequence(num, song):
+    for note in notes:
+        note.move(dt)
+    for note in song:
+        if song.index(note) > num:
+            c = song.index(note)
+            if (noteSpeed / (screenSize[0] / 2)) >= ((note[2] - beatTotal) /
+                                                     ((bpm / 60) / framerate)):
+                notes.append(
+                    Note(note[0], note[1], note[2], noteSpeed, game_surf,
+                         screenSize))
+                return c
+    return num
+
+
 # Setup ------------------------------------------------------- #
 record = Record(screenSize, game_surf)
 blueBtn = Button("W", blue, record, screenSize)
@@ -45,7 +61,9 @@ orangeBtn = Button("E", orange, record, screenSize)
 greenBtn = Button("S", green, record, screenSize)
 magentaBtn = Button("N", magenta, record, screenSize)
 
-note = Note(green, -1, 5, 2, game_surf, screenSize)
+notes = []
+currentNote = 0
+# note = Note(green, -1, 5, 2, game_surf, screenSize)
 
 # Loop ------------------------------------------------------- #
 while True:
@@ -64,12 +82,14 @@ while True:
 
     # draw the records and buttons
     record.draw(gray)
-    note.move(dt)
+
+    # spawning notes
+    if currentNote < len(s1):
+        currentNote = progressSequence(currentNote, s1)
 
     # update beat count
-
     beat = UpdateBeat(beat)
-    beatTotal = UpdateBeat(beatTotal, True)
+    beatTotal += UpdateBeat(beatTotal, True)
     # Input ------------------------------------------------ #
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -15,8 +15,11 @@ class Note:
         self.rect = pygame.Rect(self.posX, (screenSize[1] * 0.75) - 40, 50, 50)
 
     def move(self, dTime):
-        if (self.speed / (screenSize[0] / 2)) <= ((self.beat - beatTotal) /
-                                                  ((bpm / 60) / framerate)):
-            self.rect = pygame.Rect.move(self.rect,
-                                         self.speed * self.start * dTime, 0)
-            pygame.draw.ellipse(self.surf, self.color, self.rect)
+        self.rect = pygame.Rect.move(self.rect,
+                                     self.speed * self.start * dTime, 0)
+        pygame.draw.ellipse(self.surf, self.color, self.rect)
+        if self.posX < 0 or self.posX > screenSize[0]:
+            del self
+
+    def __del__(self):
+        pass
