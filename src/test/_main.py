@@ -1,4 +1,5 @@
 import pygame, time, sys, math
+from pygame import mixer
 from var import *
 from colors import *
 from Record import Record
