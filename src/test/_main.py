@@ -39,9 +39,21 @@ def UpdateBeat(b, total=False):
     return b
 
 
-def progressSequence(num, song):
+def UpdateScore(amount, score):
+    print(amount)
+    newScore = [score[0], score[1], score[2]]
+    newScore[1] += amount
+    newScore[2] += 100
+    newScore[0] = round(newScore[1] / newScore[2], 3) * 100
+    return newScore
+
+
+def progressSequence(num, song, score):
     for note in notes:
-        note.move(dt)
+        if note.active:
+            note.move(dt, delZone)
+        else:
+            notes.remove(note)
     for note in song:
         if song.index(note) > num:
             c = song.index(note)
@@ -63,11 +75,15 @@ magentaBtn = Button("N", magenta, record, screenSize)
 
 notes = []
 currentNote = 0
+delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500)
+
+score = [0, 0, 0]
+# actual score percentage, raw score value, total potential score value
+
 # note = Note(green, -1, 5, 2, game_surf, screenSize)
 
 # Loop ------------------------------------------------------- #
 while True:
-
     dt = time.time() - last_time
     dt *= 60
     last_time = time.time()
@@ -85,13 +101,19 @@ while True:
 
     # spawning notes
     if currentNote < len(s1):
-        currentNote = progressSequence(currentNote, s1)
+        currentNote = progressSequence(currentNote, s1, score)
 
     # update beat count
     beat = UpdateBeat(beat)
     beatTotal += UpdateBeat(beatTotal, True)
+
+    # score
+    sc = font2.render(f"{score[0]}", False, "white")
+    sc_rect = sc.get_rect(center=(screenSize[0] / 10, screenSize[1] / 10))
+    txt_surf.blit(sc, sc_rect)
     # Input ------------------------------------------------ #
     for event in pygame.event.get():
+        amnt = 0
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
@@ -102,22 +124,27 @@ while True:
             if event.key == pygame.K_a:
                 for btn in record.buttons:
                     if btn.orientation == "W":
-                        btn.pressed()
+                        amnt = btn.pressed(notes)
+                        if amnt > 0:
+                            score = UpdateScore(amnt, score)
             if event.key == pygame.K_d:
                 for btn in record.buttons:
                     if btn.orientation == "E":
-                        btn.pressed()
+                        amnt = btn.pressed(notes)
+                        if amnt > 0:
+                            score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 pass
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 for btn in record.buttons:
                     if btn.orientation == "W":
-                        btn.pressed("!")
+                        btn.pressed(notes, "!")
             if event.key == pygame.K_d:
                 for btn in record.buttons:
                     if btn.orientation == "E":
-                        btn.pressed("!")
+                        btn.pressed(notes, "!")
+
     # Update ------------------------------------------------- #
     screen.blit(game_surf, (0, 0))
     screen.blit(fx_surf, (0, 0))

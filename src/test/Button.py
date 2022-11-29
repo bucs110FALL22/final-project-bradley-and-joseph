@@ -6,7 +6,7 @@ from colors import *
 class Button:
 
     def __init__(self, ornt, col, record, screenSize):
-#creates a button in the desired position, with a designated, 
+        #creates a button in the desired position, with a designated,
         record.buttons.append(self)
 
         self.orientation = ornt
@@ -39,14 +39,29 @@ class Button:
                                      (btnHeight / 2) * -1)
         self.draw()
 
-    def pressed(self, param=None):
-      # called when the button is pressed, changes the active variable
+    def pressed(self, listOfNotes, param=None):
+        # called when the button is pressed, changes the active variable
         self.active = False
         if param != "!":
             self.active = True
+            for note in listOfNotes:
+                if note.rect.colliderect(pygame.Rect.inflate(
+                        self.rect, 40, 40)):
+                    if note.rect.colliderect(self.rect):
+                        if pygame.Rect.inflate(self.rect, 20,
+                                               20).contains(note.rect):
+                            note.delete()
+                            return 100
+                        note.delete()
+                        return 80
+                    note.delete()
+                    return 50
+            return 0
+        else:
+            return 0
 
     def rotate(self):
-      # When the record is rotated, this will change the orientation of the button
+        # When the record is rotated, this will change the orientation of the button
         newOrnt = ""
         if self.orientation == "N":
             newOrnt = "W"
@@ -58,7 +73,7 @@ class Button:
             newOrnt = "S"
 
     def draw(self, glowColor=pygame.Color(255, 255, 255, 50)):
-      # used to draw the buttons
+        # used to draw the buttons
         pygame.draw.ellipse(game_surf, self.color, self.rect)
         if self.active:
             glowRect = pygame.Rect.inflate(self.rect, 40, 20)

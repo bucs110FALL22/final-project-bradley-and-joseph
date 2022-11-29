@@ -8,7 +8,7 @@ bpm = 60
 beat = 0
 beatTotal = 0
 
-noteSpeed = 10
+noteSpeed = 5
 
 screen = pygame.display.set_mode()
 screenSize = pygame.display.get_window_size()
