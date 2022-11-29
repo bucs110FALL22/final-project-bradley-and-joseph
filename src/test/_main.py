@@ -41,7 +41,16 @@ def UpdateBeat(b, total=False):
 
 
 def UpdateScore(amount, score):
-    print(amount)
+    grade = ""
+    if amount == 100:
+        grade = "Perfect"
+    elif amount == 80:
+        grade = "Great"
+    elif amount == 50:
+        grade = "OK"
+    elif amount == 0:
+        grade = "Miss"
+    print(f"{grade}: {amount}")
     newScore = [score[0], score[1], score[2]]
     newScore[1] += amount
     newScore[2] += 100
@@ -126,16 +135,16 @@ while True:
                 for btn in record.buttons:
                     if btn.orientation == "W":
                         amnt = btn.pressed(notes)
-                        if amnt > 0:
+                        if amnt >= 0:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_d:
                 for btn in record.buttons:
                     if btn.orientation == "E":
                         amnt = btn.pressed(notes)
-                        if amnt > 0:
+                        if amnt >= 0:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
-                pass
+                record.spin()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 for btn in record.buttons:

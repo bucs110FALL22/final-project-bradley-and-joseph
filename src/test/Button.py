@@ -14,6 +14,7 @@ class Button:
         self.pos = [0, 0]
         self.on = False
         self.active = False
+        self.screenS = screenSize
 
         if self.orientation == "E" or self.orientation == "W":
             xOffset = 70
@@ -45,32 +46,38 @@ class Button:
         if param != "!":
             self.active = True
             for note in listOfNotes:
-                if note.rect.colliderect(pygame.Rect.inflate(
-                        self.rect, 40, 40)):
-                    if note.rect.colliderect(self.rect):
-                        if pygame.Rect.inflate(self.rect, 20,
-                                               20).contains(note.rect):
+                if note.color == self.color:
+                    if note.rect.colliderect(
+                            pygame.Rect.inflate(self.rect, 40, 40)):
+                        if note.rect.colliderect(self.rect):
+                            if pygame.Rect.inflate(self.rect, 20,
+                                                   20).contains(note.rect):
+                                note.delete()
+                                return 100
                             note.delete()
-                            return 100
+                            return 80
                         note.delete()
-                        return 80
+                        return 50
+                else:
                     note.delete()
-                    return 50
-            return 0
+                    return 0
+            return -1
         else:
-            return 0
+            return -1
 
-    def rotate(self):
+    def rotate(self, record):
         # When the record is rotated, this will change the orientation of the button
         newOrnt = ""
         if self.orientation == "N":
             newOrnt = "W"
-        if self.orientation == "E":
+        elif self.orientation == "E":
             newOrnt = "N"
-        if self.orientation == "S":
+        elif self.orientation == "S":
             newOrnt = "E"
-        if self.orientation == "W":
+        elif self.orientation == "W":
             newOrnt = "S"
+        print(f"{self.orientation} becomes {newOrnt}")
+        Button(newOrnt, self.color, record, self.screenS)
 
     def draw(self, glowColor=pygame.Color(255, 255, 255, 50)):
         # used to draw the buttons

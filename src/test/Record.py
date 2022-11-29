@@ -2,10 +2,11 @@ import pygame
 from var import *
 from colors import *
 
+
 class Record:
 
     def __init__(self, screenSize, surface):
-      #Creates the record in which the buttons will be drawn on
+        #Creates the record in which the buttons will be drawn on
         self.surface = surface
         self.width = screenSize[0] / 3
         self.height = screenSize[1] / 4
@@ -15,12 +16,20 @@ class Record:
         self.buttons = []
 
     def spin(self):
-      #Spins the record and then tells the buttons to change position
-        for btn in self.buttons:
-            btn.rotate()
+        #Spins the record and then tells the buttons to change position
+        print("~~~~~~~~~~~~ Rotating Record ~~~~~~~~~~~~~~~")
+        listOfBtns = self.buttons.copy()
+        self.buttons.clear()
+        # print(listOfBtns)
+        for n in range(4):
+            # print(n)
+            btn = listOfBtns[n]
+            print(f"rotating {btn.color}")
+            btn.rotate(self)
+        print("~~~~~~~~~~~~~~ Done Rotating ~~~~~~~~~~~~~~~~")
 
     def draw(self, color):
-      #Draws the Record and then tells the buttons to draw themselves
+        #Draws the Record and then tells the buttons to draw themselves
         pygame.draw.ellipse(self.surface, color, self.rect)
         for btn in self.buttons:
             btn.draw()
