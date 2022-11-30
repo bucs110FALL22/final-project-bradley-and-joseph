@@ -1,6 +1,7 @@
 import pygame
 from var import *
 from colors import *
+import math
 
 
 class Button:
@@ -46,9 +47,9 @@ class Button:
         if param != "!":
             self.active = True
             for note in listOfNotes:
-                if note.color == self.color:
-                    if note.rect.colliderect(
-                            pygame.Rect.inflate(self.rect, 40, 40)):
+                if note.rect.colliderect(pygame.Rect.inflate(
+                        self.rect, 40, 40)):
+                    if note.color == self.color:
                         if note.rect.colliderect(self.rect):
                             if pygame.Rect.inflate(self.rect, 20,
                                                    20).contains(note.rect):
@@ -58,9 +59,9 @@ class Button:
                             return 80
                         note.delete()
                         return 50
-                else:
-                    note.delete()
-                    return 0
+                    else:
+                        note.delete()
+                        return 0
             return -1
         else:
             return -1
@@ -70,14 +71,28 @@ class Button:
         newOrnt = ""
         if self.orientation == "N":
             newOrnt = "W"
+            pygame.draw.arc(game_surf, self.color,
+                            pygame.Rect.inflate(record.rect, -20, -20),
+                            math.pi / 2, math.pi, 10)
         elif self.orientation == "E":
             newOrnt = "N"
+            pygame.draw.arc(game_surf, self.color,
+                            pygame.Rect.inflate(record.rect, -20, -20), 0,
+                            math.pi / 2, 10)
         elif self.orientation == "S":
             newOrnt = "E"
+            pygame.draw.arc(game_surf, self.color,
+                            pygame.Rect.inflate(record.rect, -20, -20),
+                            math.pi * 1.5, 2 * math.pi, 10)
         elif self.orientation == "W":
             newOrnt = "S"
+            pygame.draw.arc(game_surf, self.color,
+                            pygame.Rect.inflate(record.rect, -20, -20),
+                            math.pi, math.pi * 1.5, 10)
         print(f"{self.orientation} becomes {newOrnt}")
         Button(newOrnt, self.color, record, self.screenS)
+        self.active = False
+        self.draw()
 
     def draw(self, glowColor=pygame.Color(255, 255, 255, 50)):
         # used to draw the buttons

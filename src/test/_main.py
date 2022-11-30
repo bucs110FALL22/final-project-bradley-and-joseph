@@ -54,7 +54,7 @@ def UpdateScore(amount, score):
     newScore = [score[0], score[1], score[2]]
     newScore[1] += amount
     newScore[2] += 100
-    newScore[0] = round(newScore[1] / newScore[2], 3) * 100
+    newScore[0] = round((newScore[1] / newScore[2]) * 100, 1)
     return newScore
 
 
