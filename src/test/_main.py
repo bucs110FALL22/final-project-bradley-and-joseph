@@ -103,7 +103,6 @@ score = [0, 0, 0]
 tableImg = pygame.image.load('UpBeat_Table.png')
 tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
 djImg = pygame.image.load('UpBeat_DJ.png')
-djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
 
 music()
 
@@ -122,7 +121,14 @@ while True:
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
 
     # sprites
-    game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
+    if (beat - round(beat)) < 0.15:
+        djImg = pygame.transform.scale(djImg,
+                                       (screenSize[1], screenSize[1] * 0.97))
+        game_surf.blit(djImg, (0.2 * screenSize[0], -0.15 * screenSize[1]))
+    else:
+        djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
+        game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
+
     game_surf.blit(tableImg, (0, -0.6 * screenSize[1]))
 
     # draw the records and buttons
