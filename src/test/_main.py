@@ -101,7 +101,9 @@ score = [0, 0, 0]
 
 #images
 tableImg = pygame.image.load('UpBeat_Table.png')
+tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
 djImg = pygame.image.load('UpBeat_DJ.png')
+djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
 
 music()
 
@@ -118,6 +120,10 @@ while True:
     game_surf.fill(pygame.Color(255, 255, 255, 0))
     fx_surf.fill(pygame.Color(255, 255, 255, 0))
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
+
+    # sprites
+    game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
+    game_surf.blit(tableImg, (0, -0.6 * screenSize[1]))
 
     # draw the records and buttons
     record.draw(gray)
@@ -178,16 +184,3 @@ while True:
     screen.blit(txt_surf, (0, 0))
     pygame.display.update()
     mainClock.tick(framerate)
-
-# running = True
-# while running:
-#     for n in range(1, 9):
-#         mn = font1.render("." * n, False, "white")
-#         mn_rect = mn.get_rect(center=(screenSize[0] / 2, screenSize[1] / 2))
-#         bc = font2.render(f"{beat}", False, "white")
-#         bc_rect = bc.get_rect(center=(screenSize[0] / 2, screenSize[1] / 3))
-#         game_surf.blit(mn, mn_rect)
-#         game_surf.blit(bc, bc_rect)
-#         pygame.display.flip()
-#         pygame.time.wait(500)
-#         beat += 0.125
