@@ -148,6 +148,9 @@ while True:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 record.spin()
+                mixer.music.load('Upbeat_Scratch.mp3')
+                mixer.music.set_volume(0.4)
+                mixer.music.play()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 for btn in record.buttons:
