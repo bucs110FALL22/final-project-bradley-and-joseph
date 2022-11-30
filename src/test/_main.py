@@ -74,7 +74,10 @@ def progressSequence(num, song, score):
                          screenSize))
                 return c
     return num
-
+def music():
+    mixer.music.load('Upbeat_Tutorial_Final.mp3')
+    mixer.music.set_volume(0.2)
+    mixer.music.play()
 
 # Setup ------------------------------------------------------- #
 record = Record(screenSize, game_surf)
@@ -90,7 +93,7 @@ delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500)
 score = [0, 0, 0]
 # actual score percentage, raw score value, total potential score value
 
-# note = Note(green, -1, 5, 2, game_surf, screenSize)
+music()
 
 # Loop ------------------------------------------------------- #
 while True:
