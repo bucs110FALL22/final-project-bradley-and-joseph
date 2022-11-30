@@ -25,16 +25,18 @@ def UpdateBeat(b, total=False):
     beatsPerFrame = (bpm / 60) / framerate
     b += beatsPerFrame
     if total == True:
-        bct = font2.render(f"{round(b,1)}", False, "white")
-        bct_rect = bct.get_rect(center=(screenSize[0] / 2, screenSize[1] / 4))
-        txt_surf.blit(bct, bct_rect)
+        # DEBUGGING TEXT
+        # bct = font2.render(f"{round(b,1)}", False, "white")
+        # bct_rect = bct.get_rect(center=(screenSize[0] / 2, screenSize[1] / 4))
+        # txt_surf.blit(bct, bct_rect)
         return beatsPerFrame
-    mn = font1.render("." * math.floor(b), False, "white")
-    mn_rect = mn.get_rect(center=(screenSize[0] / 2, screenSize[1] / 2))
-    bc = font2.render(f"{round(b,1)}", False, "white")
-    bc_rect = bc.get_rect(center=(screenSize[0] / 2, screenSize[1] / 3))
-    txt_surf.blit(bc, bc_rect)
-    txt_surf.blit(mn, mn_rect)
+    # DEBUGGING TEXT
+    # mn = font1.render("." * math.floor(b), False, "white")
+    # mn_rect = mn.get_rect(center=(screenSize[0] / 2, screenSize[1] / 2))
+    # bc = font2.render(f"{round(b,1)}", False, "white")
+    # bc_rect = bc.get_rect(center=(screenSize[0] / 2, screenSize[1] / 3))
+    # txt_surf.blit(bc, bc_rect)
+    # txt_surf.blit(mn, mn_rect)
     if b >= 9:
         b = 0
     return b
@@ -74,11 +76,14 @@ def progressSequence(num, song, score):
                          screenSize))
                 return c
     return num
+
+
 def music():
-    sound1 =  mixer.Sound("Upbeat_Tutorial_Final.mp3")
+    sound1 = mixer.Sound("Upbeat_Tutorial_Final.mp3")
     channel1 = mixer.Channel(0)
     mixer.music.set_volume(0.2)
     channel1.play(sound1)
+
 
 # Setup ------------------------------------------------------- #
 record = Record(screenSize, game_surf)
@@ -93,6 +98,10 @@ delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500)
 
 score = [0, 0, 0]
 # actual score percentage, raw score value, total potential score value
+
+#images
+tableImg = pygame.image.load('UpBeat_Table.png')
+djImg = pygame.image.load('UpBeat_DJ.png')
 
 music()
 
@@ -122,7 +131,7 @@ while True:
     beatTotal += UpdateBeat(beatTotal, True)
 
     # score
-    sc = font2.render(f"{score[0]}", False, "white")
+    sc = font2.render(f"{score[0]}%", False, "white")
     sc_rect = sc.get_rect(center=(screenSize[0] / 10, screenSize[1] / 10))
     txt_surf.blit(sc, sc_rect)
     # Input ------------------------------------------------ #
