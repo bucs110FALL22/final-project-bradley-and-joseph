@@ -75,9 +75,10 @@ def progressSequence(num, song, score):
                 return c
     return num
 def music():
-    mixer.music.load('Upbeat_Tutorial_Final.mp3')
+    sound1 =  mixer.Sound("Upbeat_Tutorial_Final.mp3")
+    channel1 = mixer.Channel(0)
     mixer.music.set_volume(0.2)
-    mixer.music.play()
+    channel1.play(sound1)
 
 # Setup ------------------------------------------------------- #
 record = Record(screenSize, game_surf)
@@ -148,9 +149,10 @@ while True:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 record.spin()
-                mixer.music.load('Upbeat_Scratch.mp3')
+                scratchSound = mixer.Sound('Upbeat_Scratch.mp3')
+                channel2 = mixer.Channel(1)
                 mixer.music.set_volume(0.4)
-                mixer.music.play()
+                channel2.play(scratchSound)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 for btn in record.buttons:
