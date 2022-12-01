@@ -76,7 +76,7 @@ def progressSequence(num, song):
     return c
 
 def music():
-    sound1 = mixer.Sound("../assets\\Upbeat_Tutorial_Final.mp3")
+    sound1 = mixer.Sound("../assets/Upbeat_Tutorial_Final.mp3")
     channel1 = mixer.Channel(0)
     mixer.music.set_volume(0.2)
     channel1.play(sound1)
@@ -99,9 +99,9 @@ currentNote = 0 #index number of the most recently spawned note
 delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500) #zone where notes get deleted
 score = [0, 0, 0]  # actual score percentage, raw score value, total potential score value
     #images
-tableImg = pygame.image.load('../assets\\UpBeat_Table.png')
+tableImg = pygame.image.load('../assets/UpBeat_Table.png')
 tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
-djImg = pygame.image.load('../assets\\UpBeat_DJ.png')
+djImg = pygame.image.load('../assets/UpBeat_DJ.png')
 
 #start
 music()
@@ -168,7 +168,7 @@ while True:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 record.spin()
-                scratchSound = mixer.Sound('../assets\\Upbeat_Scratch.mp3')
+                scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
                 channel2 = mixer.Channel(1)
                 mixer.music.set_volume(0.4)
                 channel2.play(scratchSound)
