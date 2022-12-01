@@ -80,11 +80,29 @@ def music():
     channel1 = mixer.Channel(0)
     mixer.music.set_volume(0.2)
     channel1.play(sound1)
+def menu():
+    key = True
+    startButn = pygame.Rect(screenSize[0]/3,screenSize[1]/2,screenSize[0]/3,screenSize[1]/6)
+    endButn =  pygame.Rect(screenSize[0]/3,screenSize[1]*.75,screenSize[0]/3,screenSize[1]/6)
+    pygame.draw.rect(game_surf,lightBkg,startButn)
+    pygame.draw.rect(game_surf,lightBkg,endButn)
+    screen.blit(game_surf, (0, 0))
+    pygame.display.update()
+    while key:
+        for event in pygame.event.get():
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if startButn.collidepoint(pygame.mouse.get_pos()):
+                    key = False
+                elif endButn.collidepoint(pygame.mouse.get_pos()):
+                    pygame.quit()
+                    sys.exit()
+
 
 #setup
 screen.fill(bkg)
 game_surf.fill(clear)
 fx_surf.fill(clear)
+menu()
 font1 = pygame.font.Font(None, int(100))
 font2 = pygame.font.Font(None, int(50))
 font3 = pygame.font.SysFont("impact", int(screenSize[0]/7.5))
@@ -104,6 +122,7 @@ tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
 djImg = pygame.image.load('../assets/UpBeat_DJ.png')
 
 #start
+
 music()
 last_time = time.time()
 
