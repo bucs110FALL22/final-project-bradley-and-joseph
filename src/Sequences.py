@@ -1,4 +1,4 @@
-from colors import *
+from Colors import *
 
 s1 = [
     ("dud", 0, 0),
@@ -22,4 +22,20 @@ s1 = [
     (magenta, 1, 7.5),
     (green, -1, 7.75),
     (magenta, 1, 8),
+    (green, -1, 8.5),
+    (green, -1, 8.625),
+    (magenta, 1, 8.75),
+    (magenta, 1, 8.875),
+    (green, -1, 9),
+    (blue, -1, 9.5),
+    (orange, 1, 9.75),
+    (orange, 1, 10),
+    (orange, 1, 10.5),
+    (blue, -1, 10.625),
+    (orange, 1, 10.75),
+    (blue, -1, 10.875),
+    (magenta, -1, 11.0625),
+    (magenta, 1, 11.75),
+    (magenta, 1, 11.875),
+    (blue, -1, 12.0625),
 ]

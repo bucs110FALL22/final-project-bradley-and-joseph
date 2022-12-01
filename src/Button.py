@@ -1,6 +1,5 @@
-import pygame
-from var import *
-from colors import *
+from Variables import *
+from Colors import *
 import math
 
 
@@ -52,7 +51,15 @@ class Button:
             for note in listOfNotes:
                 if note.rect.colliderect(pygame.Rect.inflate(
                         self.rect, self.wh[0], self.wh[0])):
-                    if note.color == self.color:
+                    if self.color == blueBtn:
+                        noteCol = blue
+                    if self.color == orangeBtn:
+                        noteCol = orange
+                    if self.color == greenBtn:
+                        noteCol = green
+                    if self.color == magentaBtn:
+                        noteCol = magenta
+                    if note.color == noteCol:
                         if note.rect.colliderect(self.rect):
                             if pygame.Rect.inflate(self.rect, self.wh[1],
                                                    self.wh[1]).contains(note.rect):

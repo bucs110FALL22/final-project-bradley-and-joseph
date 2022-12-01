@@ -1,6 +1,5 @@
-import pygame
-from var import *
-from colors import *
+from Variables import *
+from Colors import *
 
 
 class Record:

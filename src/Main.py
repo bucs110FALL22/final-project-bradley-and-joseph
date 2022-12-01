@@ -1,28 +1,21 @@
 import pygame, time, sys, math
 from pygame import mixer
-from var import *
-from colors import *
+from Variables import *
+from Colors import *
 from Record import Record
 from Button import Button
 from Note import Note
-from sequences import s1
-# Setup pygame/window ---------------------------------------- #
-mainClock = pygame.time.Clock()
+from Sequences import s1
 
+mainClock = pygame.time.Clock()
 pygame.init()
 pygame.display.set_caption('UpBeat')
 
-# World Vars ------------------------------------------------------- #
-
-screen.fill(bkg)
-game_surf.fill(clear)
-fx_surf.fill(clear)
 
 # Functions ------------------------------------------------------- #
 
-
 def UpdateBeat(b, total=False):
-    beatsPerFrame = (bpm / 120) / framerate
+    beatsPerFrame = (bpm / 60) / framerate
     b += beatsPerFrame
     if total == True:
         # DEBUGGING TEXT
@@ -41,7 +34,6 @@ def UpdateBeat(b, total=False):
         b = b - 1
     return b
 
-
 def UpdateScore(amount, score):
     grade = ""
     if amount == 100:
@@ -57,19 +49,24 @@ def UpdateScore(amount, score):
     newScore[1] += amount
     newScore[2] += 100
     newScore[0] = round((newScore[1] / newScore[2]) * 100, 1)
+    print(score[0])
     return newScore
-
 
 def progressSequence(num, song):
     for note in notes:
         if note.active:
-            note.move(dt, delZone)
+            if note.move(delZone) == "del":
+                global score
+                score = UpdateScore(0, score)
         else:
             notes.remove(note)
     notesToSpawn = []
+ 
     for note in song:
         if song.index(note) > num:
-            if (noteSpeed / (screenSize[0] / 2)) >= ((note[2] - beatTotal) / ((bpm / 60) / framerate)):
+            sHave = (((screenSize[0]) * (190/240))/noteSpeed)/framerate
+            sNeed = (((note[2])-beatTotal)/bpm)*60
+            if sNeed <= sHave:
                 notesToSpawn.append(Note(note[0], note[1], note[2], noteSpeed, game_surf, screenSize))
                 c = song.index(note)
     if len(notesToSpawn) == 0:
@@ -78,76 +75,76 @@ def progressSequence(num, song):
         notes.append(note)
     return c
 
-
 def music():
-    sound1 = mixer.Sound("Upbeat_Tutorial_Final.mp3")
+    sound1 = mixer.Sound("../assets\\Upbeat_Tutorial_Final.mp3")
     channel1 = mixer.Channel(0)
     mixer.music.set_volume(0.2)
     channel1.play(sound1)
 
+#setup
+screen.fill(bkg)
+game_surf.fill(clear)
+fx_surf.fill(clear)
+font1 = pygame.font.Font(None, int(100))
+font2 = pygame.font.Font(None, int(50))
+font3 = pygame.font.SysFont("impact", int(screenSize[0]/7.5))
 
-# Setup ------------------------------------------------------- #
 record = Record(screenSize, game_surf)
-blueBtn = Button("W", blue, record, screenSize)
-orangeBtn = Button("E", orange, record, screenSize)
-greenBtn = Button("S", green, record, screenSize)
-magentaBtn = Button("N", magenta, record, screenSize)
-
-notes = []
-currentNote = 0
-delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500)
-
-score = [0, 0, 0]
-# actual score percentage, raw score value, total potential score value
-
-#images
-tableImg = pygame.image.load('UpBeat_Table.png')
+blueBtn = Button("W", blueBtn, record, screenSize)
+orangeBtn = Button("E", orangeBtn, record, screenSize)
+greenBtn = Button("S", greenBtn, record, screenSize)
+magentaBtn = Button("N", magentaBtn, record, screenSize)
+notes = [] #array of all active notes
+currentNote = 0 #index number of the most recently spawned note
+delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500) #zone where notes get deleted
+score = [0, 0, 0]  # actual score percentage, raw score value, total potential score value
+    #images
+tableImg = pygame.image.load('../assets\\UpBeat_Table.png')
 tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
-djImg = pygame.image.load('UpBeat_DJ.png')
+djImg = pygame.image.load('../assets\\UpBeat_DJ.png')
 
+#start
 music()
+last_time = time.time()
 
-# Loop ------------------------------------------------------- #
 while True:
     dt = time.time() - last_time
-    dt *= 60
-    last_time = time.time()
-
-    # Visuals --------------------------------------------- #
-
-    # surfaces
+    # VISUALS ------------------------------------------------------------------------------ #
+        # surfaces
     screen.fill(bkg)
     game_surf.fill(pygame.Color(255, 255, 255, 0))
     fx_surf.fill(pygame.Color(255, 255, 255, 0))
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
 
-    # sprites
-    if (beat - round(beat)) < 0.15:
+        # sprites
+    if abs((beat*4) - round(beat*4)) < 0.1:
         djImg = pygame.transform.scale(djImg,
-                                       (screenSize[1], screenSize[1] * 0.97))
-        game_surf.blit(djImg, (0.2 * screenSize[0], -0.15 * screenSize[1]))
+                                    (screenSize[1], screenSize[1] * 0.97))
+        game_surf.blit(djImg, (0.2 * screenSize[0], -0.17 * screenSize[1]))
     else:
         djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
         game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
 
     game_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
 
-    # draw the records and buttons
+        # draw the records and buttons
     record.draw(gray)
 
-    # spawning notes
+        # score
+    sc = font3.render(f"{score[0]}%", False, lightBkg)
+    sc_rect = sc.get_rect(center=(screenSize[0] / 6, screenSize[1] / 10))
+    txt_surf.blit(sc, sc_rect)
+
+    # GAME LOGIC ----------------------------------------------------------------------------- #
+        # spawning notes
     if currentNote < len(s1):
         currentNote = progressSequence(currentNote, s1)
 
-    # update beat count
+        # update beat count
     beat = UpdateBeat(beat)
     beatTotal += UpdateBeat(beatTotal, True)
 
-    # score
-    sc = font2.render(f"{score[0]}%", False, "white")
-    sc_rect = sc.get_rect(center=(screenSize[0] / 10, screenSize[1] / 10))
-    txt_surf.blit(sc, sc_rect)
-    # Input ------------------------------------------------ #
+    # INPUT ---------------------------------------------------------------------------------- #
     for event in pygame.event.get():
         amnt = 0
         if event.type == pygame.QUIT:
@@ -171,7 +168,7 @@ while True:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 record.spin()
-                scratchSound = mixer.Sound('Upbeat_Scratch.mp3')
+                scratchSound = mixer.Sound('../assets\\Upbeat_Scratch.mp3')
                 channel2 = mixer.Channel(1)
                 mixer.music.set_volume(0.4)
                 channel2.play(scratchSound)
@@ -190,4 +187,6 @@ while True:
     screen.blit(fx_surf, (0, 0))
     screen.blit(txt_surf, (0, 0))
     pygame.display.update()
+    last_time = time.time()
     mainClock.tick(framerate)
+    

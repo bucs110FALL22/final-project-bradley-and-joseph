@@ -1,7 +1,5 @@
-import pygame
-from var import *
-from colors import *
-
+from Variables import *
+from Colors import *
 
 class Note:
 
@@ -13,19 +11,20 @@ class Note:
         self.speed = speed
         self.surf = surface
         if start == -1:
-            self.posX = (screenSize[0] / 2) + (screenSize[0] * 0.875)
+            self.posX = (screenSize[0] / 2) + (screenSize[0] * 0.89)
         elif start == 1:
-            self.posX = (screenSize[0] / 2) - (screenSize[0] * 0.9)
+            self.posX = (screenSize[0] / 2) - (screenSize[0] * 0.925)
         self.rect = pygame.Rect(self.posX, (screenSize[1] * 0.75) - (screenSize[1] * 0.025), screenSize[1] * 0.05, screenSize[1] * 0.05)
         self.active = True
 
-    def move(self, dTime, zone):
+    def move(self, zone):
         #moves the note object a certain amount and then redraws it
-        moveAmt = self.speed * self.start * dTime
+        moveAmt = self.speed * self.start
         self.rect = pygame.Rect.move(self.rect, moveAmt, 0)
         pygame.draw.ellipse(self.surf, self.color, self.rect)
         if self.rect.colliderect(zone):
             self.delete()
+            return "del"
 
     def delete(self):
         #deletes the note
