@@ -17,8 +17,12 @@ class Button:
         self.active = False
         self.screenS = screenSize
 
+        btnWidth = record.width * 0.2
+        btnHeight = btnWidth / 2
+        self.wh = (btnWidth,btnHeight)
+
         if self.orientation == "E" or self.orientation == "W":
-            xOffset = 70
+            xOffset = btnWidth * 1.75
             self.pos[1] = screenSize[1] * 0.75
             self.on = True
             if self.orientation == "E":
@@ -26,7 +30,7 @@ class Button:
             if self.orientation == "W":
                 self.pos[0] = (screenSize[0] / 2) - xOffset
         if self.orientation == "N" or self.orientation == "S":
-            yOffset = 25
+            yOffset = btnHeight * 1.5
             self.pos[0] = screenSize[0] / 2
             self.on = True
             if self.orientation == "S":
@@ -34,8 +38,7 @@ class Button:
             if self.orientation == "N":
                 self.pos[1] = (screenSize[1] * 0.75) - yOffset
 
-        btnWidth = 40
-        btnHeight = 20
+        
         self.rect = pygame.Rect(self.pos[0], self.pos[1], btnWidth, btnHeight)
         self.rect = pygame.Rect.move(self.rect, (btnWidth / 2) * -1,
                                      (btnHeight / 2) * -1)
@@ -48,11 +51,11 @@ class Button:
             self.active = True
             for note in listOfNotes:
                 if note.rect.colliderect(pygame.Rect.inflate(
-                        self.rect, 40, 40)):
+                        self.rect, self.wh[0], self.wh[0])):
                     if note.color == self.color:
                         if note.rect.colliderect(self.rect):
-                            if pygame.Rect.inflate(self.rect, 20,
-                                                   20).contains(note.rect):
+                            if pygame.Rect.inflate(self.rect, self.wh[1],
+                                                   self.wh[1]).contains(note.rect):
                                 note.delete()
                                 return 100
                             note.delete()
@@ -69,26 +72,27 @@ class Button:
     def rotate(self, record):
         # When the record is rotated, this will change the orientation of the button
         newOrnt = ""
+        infNum = int(round(self.wh[1]))
         if self.orientation == "N":
             newOrnt = "W"
             pygame.draw.arc(game_surf, self.color,
-                            pygame.Rect.inflate(record.rect, -20, -20),
-                            math.pi / 2, math.pi, 10)
+                            pygame.Rect.inflate(record.rect, -1 * infNum , -1 * infNum),
+                            math.pi * 0.75, math.pi, infNum//2)
         elif self.orientation == "E":
             newOrnt = "N"
             pygame.draw.arc(game_surf, self.color,
-                            pygame.Rect.inflate(record.rect, -20, -20), 0,
-                            math.pi / 2, 10)
+                            pygame.Rect.inflate(record.rect, -1 * infNum , -1 * infNum), math.pi * 0.25,
+                            math.pi / 2, infNum//2)
         elif self.orientation == "S":
             newOrnt = "E"
             pygame.draw.arc(game_surf, self.color,
-                            pygame.Rect.inflate(record.rect, -20, -20),
-                            math.pi * 1.5, 2 * math.pi, 10)
+                            pygame.Rect.inflate(record.rect, -1 * infNum , -1 * infNum),
+                            math.pi * 1.75, 2 * math.pi, infNum//2)
         elif self.orientation == "W":
             newOrnt = "S"
             pygame.draw.arc(game_surf, self.color,
-                            pygame.Rect.inflate(record.rect, -20, -20),
-                            math.pi, math.pi * 1.5, 10)
+                            pygame.Rect.inflate(record.rect, -1 * infNum , -1 * infNum),
+                            math.pi * 1.25, math.pi * 1.5, infNum//2)
         print(f"{self.orientation} becomes {newOrnt}")
         Button(newOrnt, self.color, record, self.screenS)
         self.active = False
@@ -98,5 +102,5 @@ class Button:
         # used to draw the buttons
         pygame.draw.ellipse(game_surf, self.color, self.rect)
         if self.active:
-            glowRect = pygame.Rect.inflate(self.rect, 40, 20)
+            glowRect = pygame.Rect.inflate(self.rect, self.wh[0], self.wh[1])
             pygame.draw.ellipse(fx_surf, glowColor, glowRect)

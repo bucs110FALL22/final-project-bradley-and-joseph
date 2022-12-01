@@ -22,7 +22,7 @@ fx_surf.fill(clear)
 
 
 def UpdateBeat(b, total=False):
-    beatsPerFrame = (bpm / 60) / framerate
+    beatsPerFrame = (bpm / 120) / framerate
     b += beatsPerFrame
     if total == True:
         # DEBUGGING TEXT
@@ -31,14 +31,14 @@ def UpdateBeat(b, total=False):
         # txt_surf.blit(bct, bct_rect)
         return beatsPerFrame
     # DEBUGGING TEXT
-    # mn = font1.render("." * math.floor(b), False, "white")
+    # mn = font1.render("." * math.floor(b / (1/8)), False, "white")
     # mn_rect = mn.get_rect(center=(screenSize[0] / 2, screenSize[1] / 2))
     # bc = font2.render(f"{round(b,1)}", False, "white")
     # bc_rect = bc.get_rect(center=(screenSize[0] / 2, screenSize[1] / 3))
     # txt_surf.blit(bc, bc_rect)
     # txt_surf.blit(mn, mn_rect)
-    if b >= 9:
-        b = 0
+    if b >= 1:
+        b = b - 1
     return b
 
 
@@ -60,22 +60,23 @@ def UpdateScore(amount, score):
     return newScore
 
 
-def progressSequence(num, song, score):
+def progressSequence(num, song):
     for note in notes:
         if note.active:
             note.move(dt, delZone)
         else:
             notes.remove(note)
+    notesToSpawn = []
     for note in song:
         if song.index(note) > num:
-            c = song.index(note)
-            if (noteSpeed / (screenSize[0] / 2)) >= ((note[2] - beatTotal) /
-                                                     ((bpm / 60) / framerate)):
-                notes.append(
-                    Note(note[0], note[1], note[2], noteSpeed, game_surf,
-                         screenSize))
-                return c
-    return num
+            if (noteSpeed / (screenSize[0] / 2)) >= ((note[2] - beatTotal) / ((bpm / 60) / framerate)):
+                notesToSpawn.append(Note(note[0], note[1], note[2], noteSpeed, game_surf, screenSize))
+                c = song.index(note)
+    if len(notesToSpawn) == 0:
+        return num
+    for note in notesToSpawn:
+        notes.append(note)
+    return c
 
 
 def music():
@@ -129,14 +130,14 @@ while True:
         djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
         game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
 
-    game_surf.blit(tableImg, (0, -0.6 * screenSize[1]))
+    game_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
 
     # draw the records and buttons
     record.draw(gray)
 
     # spawning notes
     if currentNote < len(s1):
-        currentNote = progressSequence(currentNote, s1, score)
+        currentNote = progressSequence(currentNote, s1)
 
     # update beat count
     beat = UpdateBeat(beat)

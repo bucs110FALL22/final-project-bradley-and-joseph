@@ -12,8 +12,11 @@ class Note:
         self.beat = beat
         self.speed = speed
         self.surf = surface
-        self.posX = (screenSize[0] / 2) + ((screenSize[0] * 0.9) * start * -1)
-        self.rect = pygame.Rect(self.posX, (screenSize[1] * 0.75) - 20, 30, 30)
+        if start == -1:
+            self.posX = (screenSize[0] / 2) + (screenSize[0] * 0.875)
+        elif start == 1:
+            self.posX = (screenSize[0] / 2) - (screenSize[0] * 0.9)
+        self.rect = pygame.Rect(self.posX, (screenSize[1] * 0.75) - (screenSize[1] * 0.025), screenSize[1] * 0.05, screenSize[1] * 0.05)
         self.active = True
 
     def move(self, dTime, zone):
