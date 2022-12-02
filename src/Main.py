@@ -49,6 +49,10 @@ def UpdateScore(amount, score):
     elif amount == 0:
         grade = "Miss"
         streak = 0
+        missSound = mixer.Sound('../assets/Upbeat_Miss.mp3')
+        channel3 = mixer.Channel(3)
+        missSound.set_volume(0.4)
+        channel3.play(missSound)
     print(f"{grade}: {amount}")
     newScore = [score[0], score[1], score[2]]
     newScore[1] += amount
@@ -150,6 +154,8 @@ def menu(song=None):
                     channel2 = mixer.Channel(1)
                     startSound.set_volume(0.4)
                     channel2.play(startSound)
+                    yeah.set_volume(0.1)
+                    channel3.play(yeah)
                     global chosenSong
                     chosenSong = chooseSong()
                 elif how2Butn.collidepoint(pygame.mouse.get_pos()):
@@ -203,8 +209,8 @@ def chooseSong():
     borderRadius = int(screenSize[0]/20)
 
     #btns
-    song1Btn = pygame.Rect(screenSize[0]*0.075,screenSize[1]*0.3, screenSize[0]*0.4,screenSize[1]*0.65)
-    song2Btn = pygame.Rect(screenSize[0]*0.525,screenSize[1]*0.3, screenSize[0]*0.4,screenSize[1]*0.65)
+    song1Btn = pygame.Rect(screenSize[0]*0.075,screenSize[1]*0.5, screenSize[0]*0.4,screenSize[1]*0.45)
+    song2Btn = pygame.Rect(screenSize[0]*0.525,screenSize[1]*0.5, screenSize[0]*0.4,screenSize[1]*0.45)
     pygame.draw.rect(game_surf,darkBkg,song1Btn, border_top_left_radius=borderRadius, border_bottom_left_radius=borderRadius)
     pygame.draw.rect(game_surf,darkBkg,song2Btn, border_top_right_radius=borderRadius, border_bottom_right_radius=borderRadius)
     pygame.draw.rect(game_surf,blueBtn,song1Btn, width=int(screenSize[0]/100), border_top_left_radius=borderRadius, border_bottom_left_radius=borderRadius)
@@ -212,14 +218,22 @@ def chooseSong():
 
     #text
     sst = font4.render("Select Song:", False, "white")
-    sst_rect = sst.get_rect(center=(screenSize[0]*0.5, screenSize[1] / 6))
+    sst_rect = sst.get_rect(center=(screenSize[0]*0.5, screenSize[1]*0.375))
     txt_surf.blit(sst, sst_rect)
     s1btn = font4.render("Normal", False, "white")
-    s1btnRect = s1btn.get_rect(center=(screenSize[0]*0.275,screenSize[1]*0.4))
+    s1btnRect = s1btn.get_rect(center=(screenSize[0]*0.275,screenSize[1]*0.6))
     txt_surf.blit(s1btn, s1btnRect)
     s2btn = font4.render("Challenge", False, "white")
-    s2btnRect = s2btn.get_rect(center=(screenSize[0]*0.725,screenSize[1]*0.4))
+    s2btnRect = s2btn.get_rect(center=(screenSize[0]*0.725,screenSize[1]*0.6))
     txt_surf.blit(s2btn, s2btnRect)
+
+    # bkg image
+    bkgImg = pygame.image.load('../assets/UpBeat_Crowd.png')
+    bkgImgRect = bkgImg.get_rect(center=(screenSize[0]/2,(screenSize[1]/2)))
+    scaleQuantity = screenSize[0]/bkgImgRect.width
+    bkgImg = pygame.transform.scale(bkgImg, (bkgImgRect.width*scaleQuantity, bkgImgRect.height*scaleQuantity))
+    screen.blit(bkgImg, (0, -1*screenSize[1] * 0.6))
+
 
     screen.blit(game_surf, (0, 0))
     screen.blit(txt_surf, (0, 0))
@@ -281,6 +295,7 @@ def startGame(song):
 
 #setup
 screen.fill(bkg)
+bkg_surf.fill(clear)
 game_surf.fill(clear)
 fx_surf.fill(clear)
 txt_surf.fill(clear)
@@ -316,13 +331,18 @@ score = [0, 0, 0]  # actual score percentage, raw score value, total potential s
 streak = 0
     #images
 tableImg = pygame.image.load('../assets/UpBeat_Table.png')
-tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
+tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0])).convert_alpha()
 djImg = pygame.image.load('../assets/UpBeat_DJ.png')
+djImg1 = pygame.transform.scale(djImg,(screenSize[1], screenSize[1] * 0.97)).convert_alpha()
+djImg2 = pygame.transform.scale(djImg,(screenSize[1], screenSize[1])).convert_alpha()
+crowdImg = pygame.image.load('../assets/UpBeat_Crowd.png').convert_alpha()
 
 #start
 running = False
 startGame(chosenSong)
 last_time = time.time()
+bkg_surf.fill(pygame.Color(255, 255, 255, 0))
+bkg_surf.blit(crowdImg, (0, (-0.57 * screenSize[1]) + (abs(beat - 0.5) * -0.05 * screenSize[1])))
 while running==True:
     dt = time.time() - last_time
     # VISUALS ------------------------------------------------------------------------------ #
@@ -333,13 +353,11 @@ while running==True:
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
 
         # sprites
-    if abs((beat*4) - round(beat*4)) < 0.1:
-        djImg = pygame.transform.scale(djImg,
-                                    (screenSize[1], screenSize[1] * 0.97))
-        game_surf.blit(djImg, (0.2 * screenSize[0], -0.17 * screenSize[1]))
+
+    if abs((beat*4) - round(beat*4)) < 0.07:
+        game_surf.blit(djImg1, (0.2 * screenSize[0], -0.17 * screenSize[1]))
     else:
-        djImg = pygame.transform.scale(djImg, (screenSize[1], screenSize[1]))
-        game_surf.blit(djImg, (0.2 * screenSize[0], -0.2 * screenSize[1]))
+        game_surf.blit(djImg2, (0.2 * screenSize[0], -0.2 * screenSize[1]))
 
     game_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
 
@@ -408,6 +426,7 @@ while running==True:
                         btn.pressed(notes, "!")
 
     # Update ------------------------------------------------- #
+    screen.blit(bkg_surf, (0, 0))
     screen.blit(game_surf, (0, 0))
     screen.blit(fx_surf, (0, 0))
     screen.blit(txt_surf, (0, 0))
