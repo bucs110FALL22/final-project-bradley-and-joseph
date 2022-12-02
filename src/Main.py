@@ -301,7 +301,7 @@ fx_surf.fill(clear)
 txt_surf.fill(clear)
 
 #music
-menuSong = mixer.Sound("../assets/UpBeat_Menu.mp3")
+menuSong = mixer.Sound('../assets/UpBeat_Menu.mp3')
 chosenSong=""
 yeah = mixer.Sound('../assets/UpBeat_Yells.mp3')
 channel3 = mixer.Channel(2)
