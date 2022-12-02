@@ -6,6 +6,7 @@ from Record import Record
 from Button import Button
 from Note import Note
 from Sequences import s1
+from Sequences import s2
 
 mainClock = pygame.time.Clock()
 pygame.init()
@@ -36,14 +37,18 @@ def UpdateBeat(b, total=False):
 
 def UpdateScore(amount, score):
     grade = ""
+    global streak
     if amount == 100:
         grade = "Perfect"
+        streak += 1
     elif amount == 80:
         grade = "Great"
     elif amount == 50:
         grade = "OK"
+        streak = 0
     elif amount == 0:
         grade = "Miss"
+        streak = 0
     print(f"{grade}: {amount}")
     newScore = [score[0], score[1], score[2]]
     newScore[1] += amount
@@ -61,14 +66,16 @@ def progressSequence(num, song):
         else:
             notes.remove(note)
     notesToSpawn = []
- 
+    magicNumber = 19/24
     for note in song:
         if song.index(note) > num:
-            sHave = (((screenSize[0]) * (190/240))/noteSpeed)/framerate
+            sHave = (((screenSize[0]) * magicNumber)/noteSpeed)/framerate
             sNeed = (((note[2])-beatTotal)/bpm)*60
             if sNeed <= sHave:
                 notesToSpawn.append(Note(note[0], note[1], note[2], noteSpeed, game_surf, screenSize))
                 c = song.index(note)
+            else:
+                break
     if len(notesToSpawn) == 0:
         return num
     for note in notesToSpawn:
@@ -77,7 +84,7 @@ def progressSequence(num, song):
 
 def music(sound):
     channel1 = mixer.Channel(0)
-    mixer.music.set_volume(0.2)
+    sound.set_volume(0.4)
     channel1.play(sound)
 
 def menu(song=None):
@@ -107,13 +114,13 @@ def menu(song=None):
 
     #text
     sbtn = font4.render("PLAY", False, "white")
-    sbtnRect = sbtn.get_rect(center=(screenSize[0]*0.15,screenSize[1]*0.48))
+    sbtnRect = sbtn.get_rect(center=(screenSize[0]*0.175,screenSize[1]*0.48))
     txt_surf.blit(sbtn, sbtnRect)
-    qbtn = font4.render("RULES", False, "white")
-    qbtnRect = sbtn.get_rect(center=(screenSize[0]*0.15,screenSize[1]*0.68))
-    txt_surf.blit(qbtn, qbtnRect)
+    h2btn = font4.render("RULES", False, "white")
+    h2btnRect = h2btn.get_rect(center=(screenSize[0]*0.175,screenSize[1]*0.68))
+    txt_surf.blit(h2btn, h2btnRect)
     qbtn = font4.render("QUIT", False, "white")
-    qbtnRect = sbtn.get_rect(center=(screenSize[0]*0.15,screenSize[1]*0.88))
+    qbtnRect = qbtn.get_rect(center=(screenSize[0]*0.175,screenSize[1]*0.88))
     txt_surf.blit(qbtn, qbtnRect)
     title = font3.render("UpBeat", False, "white")
     tit_rect = title.get_rect(center=(screenSize[0]*0.23, screenSize[1] / 6))
@@ -141,15 +148,16 @@ def menu(song=None):
                     key = False
                     startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    startSound.set_volume(0.4)
                     channel2.play(startSound)
-                    chooseSong()
+                    global chosenSong
+                    chosenSong = chooseSong()
                 elif how2Butn.collidepoint(pygame.mouse.get_pos()):
                     pass
                 elif endButn.collidepoint(pygame.mouse.get_pos()):
                     scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
                     pygame.time.wait(300)
                     pygame.quit()
@@ -177,7 +185,7 @@ def menu(song=None):
                 if event.key == pygame.K_ESCAPE:
                     scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
                     pygame.time.wait(300)
                     pygame.quit()
@@ -194,18 +202,24 @@ def chooseSong():
     key = True
     borderRadius = int(screenSize[0]/20)
 
+    #btns
     song1Btn = pygame.Rect(screenSize[0]*0.075,screenSize[1]*0.3, screenSize[0]*0.4,screenSize[1]*0.65)
     song2Btn = pygame.Rect(screenSize[0]*0.525,screenSize[1]*0.3, screenSize[0]*0.4,screenSize[1]*0.65)
-
     pygame.draw.rect(game_surf,darkBkg,song1Btn, border_top_left_radius=borderRadius, border_bottom_left_radius=borderRadius)
     pygame.draw.rect(game_surf,darkBkg,song2Btn, border_top_right_radius=borderRadius, border_bottom_right_radius=borderRadius)
-
     pygame.draw.rect(game_surf,blueBtn,song1Btn, width=int(screenSize[0]/100), border_top_left_radius=borderRadius, border_bottom_left_radius=borderRadius)
     pygame.draw.rect(game_surf,orangeBtn,song2Btn, width=int(screenSize[0]/100), border_top_right_radius=borderRadius, border_bottom_right_radius=borderRadius)
 
+    #text
     sst = font4.render("Select Song:", False, "white")
     sst_rect = sst.get_rect(center=(screenSize[0]*0.5, screenSize[1] / 6))
     txt_surf.blit(sst, sst_rect)
+    s1btn = font4.render("Normal", False, "white")
+    s1btnRect = s1btn.get_rect(center=(screenSize[0]*0.275,screenSize[1]*0.4))
+    txt_surf.blit(s1btn, s1btnRect)
+    s2btn = font4.render("Challenge", False, "white")
+    s2btnRect = s2btn.get_rect(center=(screenSize[0]*0.725,screenSize[1]*0.4))
+    txt_surf.blit(s2btn, s2btnRect)
 
     screen.blit(game_surf, (0, 0))
     screen.blit(txt_surf, (0, 0))
@@ -219,14 +233,16 @@ def chooseSong():
                     key = False
                     startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    startSound.set_volume(0.4)
                     channel2.play(startSound)
+                    return s1
                 elif song2Btn.collidepoint(pygame.mouse.get_pos()):
                     key = False
                     startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    startSound.set_volume(0.4)
                     channel2.play(startSound)
+                    return s2
             if event.type==pygame.MOUSEMOTION:
                     pygame.draw.rect(game_surf,darkBkg,song1Btn, border_top_left_radius=borderRadius, border_bottom_left_radius=borderRadius)
                     pygame.draw.rect(game_surf,darkBkg,song2Btn, border_top_right_radius=borderRadius, border_bottom_right_radius=borderRadius)
@@ -245,12 +261,23 @@ def chooseSong():
                 if event.key == pygame.K_ESCAPE:
                     scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
-                    mixer.music.set_volume(0.4)
+                    scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
                     menu()
 
 def howToPlay():
     pass
+
+
+def startGame(song):
+    global running
+    running = True
+    global bpm
+    bpm = song[0][1] / 4
+    global noteSpeed
+    noteSpeed = song[0][2]
+    play = mixer.Sound(song[0][0])
+    music(play)
 
 #setup
 screen.fill(bkg)
@@ -260,7 +287,9 @@ txt_surf.fill(clear)
 
 #music
 menuSong = mixer.Sound("../assets/Upbeat_Menu.mp3")
-song1 = mixer.Sound("../assets/Upbeat_Tutorial_Final.mp3")
+chosenSong=""
+yeah = mixer.Sound('../assets/Upbeat_Yeah.mp3')
+channel3 = mixer.Channel(2)
 
 #fonts
 font1 = pygame.font.Font(None, int(100))
@@ -284,16 +313,17 @@ notes = [] #array of all active notes
 currentNote = 0 #index number of the most recently spawned note
 delZone = pygame.Rect(screenSize[0] / 2, screenSize[1] / 2, 10, 500) #zone where notes get deleted
 score = [0, 0, 0]  # actual score percentage, raw score value, total potential score value
+streak = 0
     #images
 tableImg = pygame.image.load('../assets/UpBeat_Table.png')
 tableImg = pygame.transform.scale(tableImg, (screenSize[0], screenSize[0]))
 djImg = pygame.image.load('../assets/UpBeat_DJ.png')
 
 #start
-music(song1)
+running = False
+startGame(chosenSong)
 last_time = time.time()
-
-while True:
+while running==True:
     dt = time.time() - last_time
     # VISUALS ------------------------------------------------------------------------------ #
         # surfaces
@@ -321,10 +351,19 @@ while True:
     sc_rect = sc.get_rect(center=(screenSize[0] / 6, screenSize[1] / 10))
     txt_surf.blit(sc, sc_rect)
 
+        #cheering
+    if streak >= 15:
+      if (beatTotal + 1) % 2 <= 0.01:
+        vol = 0.2
+        if streak < 100:
+            vol *= ((streak - 10)/100)
+        yeah.set_volume(vol)
+        channel3.play(yeah)
+
     # GAME LOGIC ----------------------------------------------------------------------------- #
         # spawning notes
-    if currentNote < len(s1):
-        currentNote = progressSequence(currentNote, s1)
+    if currentNote < len(chosenSong):
+        currentNote = progressSequence(currentNote, chosenSong)
 
         # update beat count
     beat = UpdateBeat(beat)
@@ -356,7 +395,7 @@ while True:
                 record.spin()
                 scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
                 channel2 = mixer.Channel(1)
-                mixer.music.set_volume(0.4)
+                scratchSound.set_volume(0.6)
                 channel2.play(scratchSound)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
