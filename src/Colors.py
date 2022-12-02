@@ -2,6 +2,7 @@ import pygame
 
 #colors
 bkg = pygame.Color(45, 30, 100)
+darkBkg = pygame.Color(10,5,30)
 lightBkg = pygame.Color(100,75,160)
 gray = pygame.Color(55, 50, 60)
 blue = pygame.Color(0, 200, 255)
