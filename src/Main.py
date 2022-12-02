@@ -49,7 +49,7 @@ def UpdateScore(amount, score):
     elif amount == 0:
         grade = "Miss"
         streak = 0
-        missSound = mixer.Sound('../assets/Upbeat_Miss.mp3')
+        missSound = mixer.Sound('../assets/UpBeat_Miss.mp3')
         channel3 = mixer.Channel(3)
         missSound.set_volume(0.4)
         channel3.play(missSound)
@@ -150,7 +150,7 @@ def menu(song=None):
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if startButn.collidepoint(pygame.mouse.get_pos()):
                     key = False
-                    startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
+                    startSound = mixer.Sound('../assets/UpBeat_Start.mp3')
                     channel2 = mixer.Channel(1)
                     startSound.set_volume(0.4)
                     channel2.play(startSound)
@@ -161,7 +161,7 @@ def menu(song=None):
                 elif how2Butn.collidepoint(pygame.mouse.get_pos()):
                     pass
                 elif endButn.collidepoint(pygame.mouse.get_pos()):
-                    scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
+                    scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
                     scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
@@ -189,7 +189,7 @@ def menu(song=None):
                     pygame.display.update()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
+                    scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
                     scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
@@ -245,14 +245,14 @@ def chooseSong():
             if event.type==pygame.MOUSEBUTTONDOWN:
                 if song1Btn.collidepoint(pygame.mouse.get_pos()):
                     key = False
-                    startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
+                    startSound = mixer.Sound('../assets/UpBeat_Start.mp3')
                     channel2 = mixer.Channel(1)
                     startSound.set_volume(0.4)
                     channel2.play(startSound)
                     return s1
                 elif song2Btn.collidepoint(pygame.mouse.get_pos()):
                     key = False
-                    startSound = mixer.Sound('../assets/Upbeat_Start.mp3')
+                    startSound = mixer.Sound('../assets/UpBeat_Start.mp3')
                     channel2 = mixer.Channel(1)
                     startSound.set_volume(0.4)
                     channel2.play(startSound)
@@ -273,7 +273,7 @@ def chooseSong():
                     pygame.display.update()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
+                    scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
                     scratchSound.set_volume(0.6)
                     channel2.play(scratchSound)
@@ -301,9 +301,9 @@ fx_surf.fill(clear)
 txt_surf.fill(clear)
 
 #music
-menuSong = mixer.Sound("../assets/Upbeat_Menu.mp3")
+menuSong = mixer.Sound("../assets/UpBeat_Menu.mp3")
 chosenSong=""
-yeah = mixer.Sound('../assets/Upbeat_Yells.mp3')
+yeah = mixer.Sound('../assets/UpBeat_Yells.mp3')
 channel3 = mixer.Channel(2)
 
 #fonts
@@ -411,7 +411,7 @@ while running==True:
                             score = UpdateScore(amnt, score)
             if event.key == pygame.K_SPACE:
                 record.spin()
-                scratchSound = mixer.Sound('../assets/Upbeat_Scratch.mp3')
+                scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
                 channel2 = mixer.Channel(1)
                 scratchSound.set_volume(0.6)
                 channel2.play(scratchSound)
