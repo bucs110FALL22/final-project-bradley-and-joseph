@@ -1,7 +1,7 @@
 from Colors import *
 
 s1 = [
-    ("../assets/Upbeat_Tutorial_Final.mp3", 60, 5),
+    ("../assets/UpBeat_Tutorial_Final.mp3", 60, 5),
     (blue, 1, 3),
     (blue, 1, 3.5),
     (orange, -1, 3.75),
@@ -61,7 +61,7 @@ s1 = [
 ]
 
 s2 = [
-    ("../assets/Upbeat_Sweden.mp3", 122, 10),
+    ("../assets/UpBeat_Sweden.mp3", 122, 10),
     (blue, 1, 3),
     (magenta, 1, 4),
     (orange, 1, 5),
