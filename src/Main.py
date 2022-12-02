@@ -303,7 +303,7 @@ txt_surf.fill(clear)
 #music
 menuSong = mixer.Sound("../assets/Upbeat_Menu.mp3")
 chosenSong=""
-yeah = mixer.Sound('../assets/Upbeat_Yeah.mp3')
+yeah = mixer.Sound('../assets/Upbeat_Yells.mp3')
 channel3 = mixer.Channel(2)
 
 #fonts
