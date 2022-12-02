@@ -75,15 +75,19 @@ The Project is broken down into the following file structure:
 ## Tasks and Responsibilities 
 
    * Outline the team member roles and who was responsible for each class/method, both individual and collaborative.
-
+  #Bradley did the art work and game logic
+  #Joseph did the menu logic and music sounds
 ## Testing
 
 * << Describe your testing strategy for your project. >>
-
+  #would run the program a lot if there was a bug we would fix it
 ## ATP
 
 | Step                 |Procedure             |Expected Results                   |
 |----------------------|:--------------------:|----------------------------------:|
-|  1                   | Run Counter Program  |GUI window appears with count = 0  |
-|  2                   | click count button   | display changes to count = 1      |
-etc...
+|  1                   | start the program |menu window should open  |
+|  2                   | click play  | should open a menu for easy or hard mode    |
+|3|click easy or hard|should open the main game on the selected mode|
+|4|click the notes when they move into the buttons using A or D|should make the notes disabpear|
+|5|if the notes are on a diffrent color not assigend to A or D click space to change the color rotation|should spin the record|                     
+
