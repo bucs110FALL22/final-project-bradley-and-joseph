@@ -1,74 +1,101 @@
 :warning: Everything between << >> needs to be replaced (remove << >> after replacing)
 # CS110 Project Proposal
-# << Project Title >>
+# UpBeat
 ## CS 110 Final Project
-### << Semester, Year >>
+### Fall, 2022
 ### [Assignment Description](https://docs.google.com/document/d/1H4R6yLL7som1lglyXWZ04RvTp_RvRFCCBn6sqv-82ps/edit?usp=sharing)
 
-<< [repl](#) >> https://replit.com/join/awmmbraijp-josephmichaud1
+https://github.com/bucs110FALL22/final-project-bradley-and-joseph
 
-<< [link to demo presentation slides](#) >>
+https://docs.google.com/presentation/d/1M-YlEWq-w3O_cC81A6ncQaCJwq4f05Qk_ocL5hgvGgc/edit?usp=sharing
 
-### Team: << Bradley and Joseph >>
-#### << Bradley and Joseph >>
+### Team: Bradley and Joseph
+#### Bradley Vaval and Joseph Michaud
 
 ***
 
 ## Project Description
 
-<< Give an overview of your project >>
 # We aim to create a gimmicky rhythm game with mechanics similar to games like Dance Dance Revolution and Guitar Hero with tracks, notes, and terminals for the notes that respond to button inputs. What would make our game different is that the tracks are arranged in a cross pattern with the notes converging in the center. To keep it from being too overwhelming, only the left and right tracks are active at a time and the player has the ability to rotate the order of the terminals. It's admittedly difficult to explain, but visually a simple concept, and simple concepts with lots of applications make for potentially difficult but enjoyable gameplay.
 ***    
 
 ## User Interface Design
 
 - **Initial Concept**
-  - << A wireframe or drawing of the user interface concept along with a short description of the interface. You should have one for each screen in your program. For example, if your program has a start screen, game screen, and game over screen, you should include a wireframe / screenshot / drawing of each one and a short description of the components. >>
+  - ![initial gameplay](assets/ReadMeAssets/UpBeat_InitialConcept_1.png)
+  - ![initial menu](assets/ReadMeAssets/UpBeat_InitialConcept_2.png)
     
     
 - **Final GUI**
-  - << You should also have a screenshot of each screen for your final GUI >>
+  - ![final menu](assets/ReadMeAssets/UpBeat_FinalGUI_1.png)
+  - ![final how to play](assets/ReadMeAssets/UpBeat_FinalGUI_2.png)
+  - ![final gameplay](assets/ReadMeAssets/UpBeat_FinalGUI_3.png)
 
 ***        
 
 ## Program Design
 
 * Non-Standard libraries
-    * << You should have a list of any additional libraries or modules used (pygame, request) beyond non-standard python. 
-         For each additional module you should include
-         - url for the module documentation
-         - a short description of the module >>
+    * time
+         - https://docs.python.org/3/library/time.html
+         - Can provide the real world passing time
+    * math
+         - https://docs.python.org/3/library/math.html
+         - Allows you to use more complex mathematical functions and values
+    * sys
+         - https://docs.python.org/3/library/sys.html
+         - Allows the use of variables normally hidden behind the hood of your system
 * Class Interface Design
     * << A simple drawing that shows the class relationships in your code (see below for an example). This does not need to be overly detailed, but should show how your code fits into the Model/View/Controller paradigm. >>
-        * ![class diagram](assets/class_diagram.jpg) 
+        * ![class diagram](assets/ReadMeAssets/UpBeat_classDiagram.png) 
 * Classes
-    * Button: color, orientation, position, active, on
-      * init: creates a button in the desired position, with a designated
-      * pressed: called when the button is pressed, changes the active variable
-      * rotate: when the record is rotated, this will change the orientation of the button
-      * draw: used to draw the buttons
-
     * Record: surface, height and width, list of buttons
       * init: Creates the record in which the buttons will be drawn on
       * spin: Spins the record and then tells the buttons to change position
       * draw: used to draw the record and tell the buttons to draw themselves
 
+    * Button: color, orientation, position, active, on
+      * init: creates a button in the desired position, with a designated
+      * pressed: called when the button is pressed, detects for notes to be deleted
+      * rotate: when the record is rotated, this will create new buttons in the rotated position
+      * draw: used to draw the buttons
+
+    * Note: color, start, beat, spead, active
+      * init: Creates the note which will travel along the screen
+      * move: Moves the note according to its speed and direction
+      * delete: Deletes the note, adjusts score
+
 ## Project Structure and File List
 
 The Project is broken down into the following file structure:
 
-* main.py
 * src
-  *  main
-  *  var
-  *  colors
+  *  Main
+  *  Variables
+  *  Colors
+  *  Sequences
   *  Objects:
     *  Record
     *  Button
+    *  Note
 * assets
-    * << all of your media, i.e. images, font files, etc, should go here) >>
+    * Songs
+      * Menu
+      * Tutorial Final 
+      * Sweden 
+    * Sounds
+      * Miss 
+      * Scratch 
+      * Start 
+      * Yells
+    * Images
+      * Crowd 
+      * DJ
+      * How2
+      * Table
+      * TempBkg
 * etc
-    * << This is a catch all folder for things that are not part of your project, but you want to keep with your project >>
+
 
 ***
 
@@ -80,7 +107,7 @@ The Project is broken down into the following file structure:
 ## Testing
 
 * << Describe your testing strategy for your project. >>
-  #would run the program a lot if there was a bug we would fix it
+  #Ran the program frequently, if there was a bug we would do our best to fix it before moving on or committing.
 ## ATP
 
 | Step                 |Procedure             |Expected Results                   |
