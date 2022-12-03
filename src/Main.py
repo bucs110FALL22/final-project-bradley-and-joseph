@@ -159,7 +159,13 @@ def menu(song=None):
                     global chosenSong
                     chosenSong = chooseSong()
                 elif how2Butn.collidepoint(pygame.mouse.get_pos()):
-                    pass
+                    key = False
+                    startSound = mixer.Sound('../assets/UpBeat_Start.mp3')
+                    channel2 = mixer.Channel(1)
+                    startSound.set_volume(0.4)
+                    channel2.play(startSound)
+                    howToPlay()
+
                 elif endButn.collidepoint(pygame.mouse.get_pos()):
                     scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
                     channel2 = mixer.Channel(1)
@@ -197,7 +203,6 @@ def menu(song=None):
                     pygame.quit()
                     sys.exit()
 
-
 def chooseSong():
 
     screen.fill(bkg)
@@ -217,6 +222,9 @@ def chooseSong():
     pygame.draw.rect(game_surf,orangeBtn,song2Btn, width=int(screenSize[0]/100), border_top_right_radius=borderRadius, border_bottom_right_radius=borderRadius)
 
     #text
+    esct = font2.render("Press [ESC] to go Back", False, lightBkg)
+    esct_rect = esct.get_rect(center=(screenSize[0]*0.125, screenSize[1]*0.025))
+    txt_surf.blit(esct, esct_rect)
     sst = font4.render("Select Song:", False, "white")
     sst_rect = sst.get_rect(center=(screenSize[0]*0.5, screenSize[1]*0.375))
     txt_surf.blit(sst, sst_rect)
@@ -280,8 +288,85 @@ def chooseSong():
                     menu()
 
 def howToPlay():
-    pass
+    screen.fill(darkBkg)
+    game_surf.fill(clear)
+    fx_surf.fill(clear)
+    txt_surf.fill(clear)
 
+    key = True
+    global ldm
+
+    ldmBtn = pygame.Rect(screenSize[0]*0.45,screenSize[1]*0.55,screenSize[0]*0.1,screenSize[0]*0.1,)
+    pygame.draw.rect(game_surf,gray,ldmBtn)
+        #text
+
+    esct = font2.render("Press [ESC] to go Back", False, lightBkg)
+    esct_rect = esct.get_rect(center=(screenSize[0]*0.125, screenSize[1]*0.025))
+    txt_surf.blit(esct, esct_rect)
+    desct = font2.render("LDM", False, "white")
+    desct_rect = desct.get_rect(center=(screenSize[0]*0.5, screenSize[1]*0.5))
+    txt_surf.blit(desct, desct_rect)
+    desct = font2.render("Better Performance", False, "white")
+    desct_rect = desct.get_rect(center=(screenSize[0]*0.5, screenSize[1]*0.75))
+    txt_surf.blit(desct, desct_rect)
+    desct = font2.render("But Worse Visuals", False, "white")
+    desct_rect = desct.get_rect(center=(screenSize[0]*0.5, screenSize[1]*0.8))
+    txt_surf.blit(desct, desct_rect)
+
+    if ldm == True:
+        pygame.draw.rect(game_surf,green,ldmBtn, width=int(screenSize[0]/100))
+        ldmbtn = font2.render("ON", False, "white")
+    elif ldm == False:
+        pygame.draw.rect(game_surf,orange,ldmBtn, width=int(screenSize[0]/100))
+        ldmbtn = font2.render("OFF", False, "white")
+
+    ldmbtnRect = ldmbtn.get_rect(center=(screenSize[0]*0.5,screenSize[1]*0.625))
+    game_surf.blit(ldmbtn, ldmbtnRect)
+
+    bkgImg = pygame.image.load('../assets/UpBeat_How2.png')
+    bkgImgRect = bkgImg.get_rect(center=(screenSize[0]/2,(screenSize[1]/2)))
+    scaleQuantity = screenSize[0]/bkgImgRect.width
+    bkgImg = pygame.transform.scale(bkgImg, (bkgImgRect.width*scaleQuantity, bkgImgRect.height*scaleQuantity))
+    screen.blit(bkgImg, (0, (screenSize[1]-(bkgImgRect.height * scaleQuantity))/2))
+
+    screen.blit(game_surf, (0, 0))
+    screen.blit(txt_surf, (0, 0))
+    pygame.display.update()
+
+    while key:
+        for event in pygame.event.get():
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                if ldmBtn.collidepoint(pygame.mouse.get_pos()):
+                    game_surf.fill(clear)
+                    pygame.draw.rect(game_surf,gray,ldmBtn)
+                    if ldm == True:
+                        ldm = False
+                        scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
+                        channel2 = mixer.Channel(1)
+                        scratchSound.set_volume(0.6)
+                        channel2.play(scratchSound)
+                        pygame.draw.rect(game_surf,orange,ldmBtn, width=int(screenSize[0]/100))
+                        ldmbtn = font2.render("OFF", False, "white")
+                    elif ldm == False:
+                        ldm = True
+                        startSound = mixer.Sound('../assets/UpBeat_Start.mp3')
+                        channel2 = mixer.Channel(1)
+                        startSound.set_volume(0.4)
+                        channel2.play(startSound)
+                        pygame.draw.rect(game_surf,green,ldmBtn, width=int(screenSize[0]/100))
+                        ldmbtn = font2.render("ON", False, "white")
+                    ldmbtnRect = ldmbtn.get_rect(center=(screenSize[0]*0.5,screenSize[1]*0.625))
+                    game_surf.blit(ldmbtn, ldmbtnRect)
+                    screen.blit(game_surf, (0, 0))
+                    pygame.display.update()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    key = False
+                    scratchSound = mixer.Sound('../assets/UpBeat_Scratch.mp3')
+                    channel2 = mixer.Channel(1)
+                    scratchSound.set_volume(0.6)
+                    channel2.play(scratchSound)
+                    menu()
 
 def startGame(song):
     global running
@@ -299,6 +384,9 @@ bkg_surf.fill(clear)
 game_surf.fill(clear)
 fx_surf.fill(clear)
 txt_surf.fill(clear)
+
+ldm = False
+#LOW DETAIL MODE, Better Performance
 
 #music
 menuSong = mixer.Sound('../assets/UpBeat_Menu.mp3')
@@ -342,7 +430,11 @@ running = False
 startGame(chosenSong)
 last_time = time.time()
 bkg_surf.fill(pygame.Color(255, 255, 255, 0))
-bkg_surf.blit(crowdImg, (0, (-0.57 * screenSize[1]) + (abs(beat - 0.5) * -0.05 * screenSize[1])))
+if ldm == False:
+    bkg_surf.blit(crowdImg, (0, (-0.57 * screenSize[1]) + (abs(beat - 0.5) * -0.05 * screenSize[1])))
+elif ldm == True:
+    bkg_surf.blit(djImg1, (0.2 * screenSize[0], -0.17 * screenSize[1]))
+    bkg_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
 while running==True:
     dt = time.time() - last_time
     # VISUALS ------------------------------------------------------------------------------ #
@@ -353,13 +445,12 @@ while running==True:
     txt_surf.fill(pygame.Color(255, 255, 255, 0))
 
         # sprites
-
-    if abs((beat*4) - round(beat*4)) < 0.07:
-        game_surf.blit(djImg1, (0.2 * screenSize[0], -0.17 * screenSize[1]))
-    else:
-        game_surf.blit(djImg2, (0.2 * screenSize[0], -0.2 * screenSize[1]))
-
-    game_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
+    if ldm == False:
+        if abs((beat*4) - round(beat*4)) < 0.07:
+            game_surf.blit(djImg1, (0.2 * screenSize[0], -0.17 * screenSize[1]))
+        else:
+            game_surf.blit(djImg2, (0.2 * screenSize[0], -0.2 * screenSize[1]))
+        game_surf.blit(tableImg, (0, -0.57 * screenSize[1]))
 
         # draw the records and buttons
     record.draw(gray)
